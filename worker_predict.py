@@ -46,6 +46,7 @@ class WorkerPredict(QObject):
     @Slot(np.ndarray)
     def predict_load_model(self, img):
         prediction = self.model.predict(img)
+        print(prediction)
 
         threshold = 0.0001
         min_value = np.min(prediction)
@@ -55,4 +56,5 @@ class WorkerPredict(QObject):
 
         self.signal_send_probability.emit(normalized_prediction)
         predict_number = str(prediction.argmax())
+        print(predict_number)
         self.signal_send_predict.emit(predict_number)

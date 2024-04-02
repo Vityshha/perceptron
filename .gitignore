@@ -1,0 +1,9 @@
+venv/
+.venv
+.idea
+*.mp4
+*.pt
+
+
+
+__pycache__/

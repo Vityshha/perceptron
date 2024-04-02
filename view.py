@@ -147,11 +147,13 @@ class View(QMainWindow, Ui_MainWindow):
 
                 if pixel_color.black().real == 255:
                     array[y, x] = 1
+                else:
+                    array[y, x] = 0
 
         # Нормализация данных
-        fig, ax = plt.subplots()
-        ax.imshow(array, aspect='auto')
-        plt.show()
+        # fig, ax = plt.subplots()
+        # ax.imshow(array, aspect='auto')
+        # plt.show()
         normalized_image = array.astype(np.float32)
         normalized_image = np.expand_dims(normalized_image, axis=0)
 

@@ -36,6 +36,10 @@ class PerceptronDefaultModel(QObject):
         self.x_train = self.x_train.astype('float32')
         self.x_test = self.x_test.astype('float32')
 
+        self.x_train = np.concatenate((self.x_train, self.x_test), axis=0)
+        self.y_train = np.concatenate((self.y_train, self.y_test), axis=0)
+
+
         # normalize image pixel values by dividing
         # by 255
         # self.x_train /= self.gray_scale
@@ -44,8 +48,11 @@ class PerceptronDefaultModel(QObject):
         # Нам не нужна градация))
         self.x_test[self.x_test != 0] = 1
         self.x_train[self.x_train != 0] = 1
-        self.y_train[self.y_train != 0] = 1
-        self.y_test[self.y_test != 0] = 1
+
+        # self.x_test[self.x_test == 0] = -0.5
+        # self.x_train[self.x_train == 0] = -0.5
+        # self.y_train[self.y_train == 0] = -0.5
+        # self.y_test[self.y_test == 0] = -0.5
 
     def init_model(self):
         self.model = Sequential([
@@ -68,7 +75,7 @@ class PerceptronDefaultModel(QObject):
 
         self.model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-    def train_model(self, epochs=20, batch_size=2000, validation_split=0.2):
+    def train_model(self, epochs=20, batch_size=120, validation_split=0.2):
         epoch_end_callback = LambdaCallback(on_epoch_end=self.print_epoch_end)
         self.model.fit(self.x_train, self.y_train, epochs=epochs, batch_size=batch_size, validation_split=validation_split, callbacks=[epoch_end_callback])
         self.save_model(model_name='Default')
